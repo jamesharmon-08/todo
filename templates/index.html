@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="box">
+    <h1>Task</h1>
+
+    <form action="{{ url_for('add') }}" method="post">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+             {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <input type="text" name="task" placeholder="task" required="required"/>
+        <button type="submit" class="btn btn-primary btn-large">Add task.</button>
+    </form>
+</div>
+<div class="tasks">
+    <ul>
+        {% for task in all_tasks %}
+            <div id="parent" style="width: 100%">
+            {% if task.completed == True %}<li style="color:Grey"> {% else %} <li> {% endif %}
+                {{ task.task_to_complete }}
+
+            <div id="right">
+                <a href = "{{url_for('fave', task_id=task.id)}}">
+                {% if task.favourite == True %} ⭐ {% else %} ☆ {% endif %}</a>
+                {% if task.completed == False%}<a href = "{{url_for('complete', task_id=task.id)}}">✅</a> {% endif %}
+                <a href = "{{url_for('delete_task', task_id=task.id)}}">❌</a>
+            </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+{% endblock %}
